@@ -9,14 +9,14 @@ package com.mindBehindCase.mindBehindCase.core.utilities.results;
  *
  * @author oguz.turkaslan
  */
-public class SuccessResult<T> extends Result<T> {
+public class SuccessResult extends Result {
 
-    public SuccessResult(T data, boolean success, String errorCode, String message) {
-        super(data, true, errorCode, message);
+    public SuccessResult(boolean success, String errorCode, String message) {
+        super(true, errorCode, message);
     }
 
-    public SuccessResult(T data, boolean success) {
-        super(data, success);
+    public SuccessResult(boolean success) {
+        super(success);
     }
 
 }

@@ -8,6 +8,7 @@ package com.mindBehindCase.mindBehindCase.business.concretes;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mindBehindCase.mindBehindCase.business.abstracts.APIService;
+import com.mindBehindCase.mindBehindCase.core.utilities.results.ErrorResult;
 import com.mindBehindCase.mindBehindCase.core.utilities.results.Result;
 import com.mindBehindCase.mindBehindCase.core.utilities.results.SuccessResult;
 import com.mindBehindCase.mindBehindCase.model.Comments;
@@ -32,11 +33,14 @@ import org.springframework.stereotype.Service;
 public class APIManager implements APIService {
 
     @Override
-    public Result<List<Comments>> getComments() {
+    public Result getComments() {
         List<Comments> commentsList = new ArrayList<>();
         Gson gson = new Gson();
         String requestAPI = requestHTTP();
-        // Type commentsListType = ;
+        if (requestAPI.equals("error")) {
+            return new ErrorResult(false, "404", "Connection Error");
+        }
+        
         commentsList = gson.fromJson(requestAPI, new TypeToken<List<Comments>>() {
         }.getType());
         FileWriter writer;
@@ -49,15 +53,15 @@ public class APIManager implements APIService {
         } catch (IOException ex) {
             Logger.getLogger(APIManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new SuccessResult<>(commentsList, true);
+        return new SuccessResult(true);
     }
 
     public String requestHTTP() {
         URL url;
-        HttpURLConnection con;
+        HttpURLConnection con = null;
         StringBuilder sb = null;
         try {
-            url = new URL("https://my-json-server.typicode.com/typicode/demo/comments");
+            url = new URL("https://my-json-server.typicode.com/typicode/demo/comment");
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setDoOutput(true);
@@ -71,6 +75,7 @@ public class APIManager implements APIService {
             br.close();
 
         } catch (Exception ex) {
+            sb.append("error");
             Logger.getLogger(APIManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sb.toString();

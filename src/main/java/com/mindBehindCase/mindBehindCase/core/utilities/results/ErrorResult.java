@@ -9,10 +9,10 @@ package com.mindBehindCase.mindBehindCase.core.utilities.results;
  *
  * @author oguz.turkaslan
  */
-public class ErrorResult<T> extends Result<T> {
+public class ErrorResult extends Result {
 
-    public ErrorResult(T data, boolean success, String errorCode, String message) {
-        super(data, false, errorCode, message);
+    public ErrorResult(boolean success, String errorCode, String message) {
+        super(false, errorCode, message);
     }
 
 }

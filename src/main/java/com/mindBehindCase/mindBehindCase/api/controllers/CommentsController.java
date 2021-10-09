@@ -7,8 +7,6 @@ package com.mindBehindCase.mindBehindCase.api.controllers;
 
 import com.mindBehindCase.mindBehindCase.business.abstracts.CommentsService;
 import com.mindBehindCase.mindBehindCase.core.utilities.results.Result;
-import com.mindBehindCase.mindBehindCase.model.Comments;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +26,8 @@ public class CommentsController {
     }
 
     @GetMapping("/getComments")
-    public Result<List<Comments>> getComments() {
-        return commentsService.getComments();
+    public Result getComments() {
+        return (Result) commentsService.getComments();
     }
 
 }

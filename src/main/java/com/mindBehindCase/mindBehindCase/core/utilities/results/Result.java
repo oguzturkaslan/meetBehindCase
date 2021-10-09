@@ -12,24 +12,44 @@ import lombok.Setter;
  *
  * @author oguz.turkaslan
  */
-@Getter
-@Setter
-public class Result<T> {
+public class Result {
 
-    private T data;
     private boolean success;
     private String errorCode;
     private String message;
 
-    public Result(T data, boolean success, String errorCode, String message) {
-        this.data = data;
+    public Result(boolean success, String errorCode, String message) {
         this.success = success;
         this.errorCode = errorCode;
         this.message = message;
     }
 
-    public Result(T data, boolean success) {
-        this.data = data;
+    public Result(boolean success) {
         this.success = success;
     }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
 }

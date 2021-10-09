@@ -6,8 +6,6 @@
 package com.mindBehindCase.mindBehindCase.business.abstracts;
 
 import com.mindBehindCase.mindBehindCase.core.utilities.results.Result;
-import com.mindBehindCase.mindBehindCase.model.Comments;
-import java.util.List;
 
 /**
  *
@@ -15,6 +13,6 @@ import java.util.List;
  */
 public interface APIService {
 
-    Result<List<Comments>> getComments();
+    Result getComments();
 
 }
