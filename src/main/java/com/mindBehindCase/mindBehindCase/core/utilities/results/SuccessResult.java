@@ -15,4 +15,8 @@ public class SuccessResult<T> extends Result<T> {
         super(data, true, errorCode, message);
     }
 
+    public SuccessResult(T data, boolean success) {
+        super(data, success);
+    }
+
 }

@@ -5,10 +5,15 @@
  */
 package com.mindBehindCase.mindBehindCase.core.utilities.results;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author oguz.turkaslan
  */
+@Getter
+@Setter
 public class Result<T> {
 
     private T data;
@@ -23,37 +28,8 @@ public class Result<T> {
         this.message = message;
     }
 
-    /*public Result(boolean success, String errorCode, String message) {
-        this.success = success;
-        this.errorCode = errorCode;
-        this.message = message;
-    }*/
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
+    public Result(T data, boolean success) {
+        this.data = data;
         this.success = success;
     }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
 }
