@@ -37,10 +37,14 @@ public class APIManager implements APIService {
         List<Comments> commentsList = new ArrayList<>();
         Gson gson = new Gson();
         String requestAPI = requestHTTP();
-        if (requestAPI.equals("error")) {
-            return new ErrorResult(false, "404", "Connection Error");
+        System.out.println("requestAPI ==================================== " + requestAPI);
+        Result result = new Result(false);
+        result = gson.fromJson(requestAPI, new TypeToken<Result>() {
+        }.getType());
+        if (result.getErrorCode() > HttpURLConnection.HTTP_OK) {
+            return result;
         }
-        
+
         commentsList = gson.fromJson(requestAPI, new TypeToken<List<Comments>>() {
         }.getType());
         FileWriter writer;
@@ -60,22 +64,36 @@ public class APIManager implements APIService {
         URL url;
         HttpURLConnection con = null;
         StringBuilder sb = null;
+        InputStream is;
+        BufferedReader br;
         try {
-            url = new URL("https://my-json-server.typicode.com/typicode/demo/comment");
+            url = new URL("https://my-json-server.typicode.com/typicode/demo/comments");
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setDoOutput(true);
-            InputStream is = con.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
             sb = new StringBuilder();
             String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-            br.close();
 
-        } catch (Exception ex) {
-            sb.append("error");
+            if (con.getResponseCode() < HttpURLConnection.HTTP_BAD_REQUEST) {
+                is = con.getInputStream();
+                br = new BufferedReader(new InputStreamReader(is));
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                br.close();
+            } else {
+                is = con.getErrorStream();
+                br = new BufferedReader(new InputStreamReader(is));
+                sb.append("{")
+                        .append("\"errorCode\"" + ":")
+                        .append(con.getResponseCode())
+                        .append(",")
+                        .append("\"message\"" + ":")
+                        .append("\"" + con.getResponseMessage() + "\"")
+                        .append("}");
+            }
+
+        } catch (IOException ex) {
             Logger.getLogger(APIManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sb.toString();

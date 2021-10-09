@@ -11,12 +11,7 @@ package com.mindBehindCase.mindBehindCase.core.utilities.results;
  */
 public class SuccessResult extends Result {
 
-    public SuccessResult(boolean success, String errorCode, String message) {
-        super(true, errorCode, message);
-    }
-
     public SuccessResult(boolean success) {
-        super(success);
+        super(success, 200, "Yorumlar Listelenip output.txt Dosyasına yazıldı.");
     }
-
 }

@@ -5,9 +5,6 @@
  */
 package com.mindBehindCase.mindBehindCase.core.utilities.results;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  *
  * @author oguz.turkaslan
@@ -15,10 +12,10 @@ import lombok.Setter;
 public class Result {
 
     private boolean success;
-    private String errorCode;
+    private int errorCode;
     private String message;
 
-    public Result(boolean success, String errorCode, String message) {
+    public Result(boolean success, int errorCode, String message) {
         this.success = success;
         this.errorCode = errorCode;
         this.message = message;
@@ -36,11 +33,11 @@ public class Result {
         this.success = success;
     }
 
-    public String getErrorCode() {
+    public int getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
 

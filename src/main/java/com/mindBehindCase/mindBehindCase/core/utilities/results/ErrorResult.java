@@ -11,7 +11,7 @@ package com.mindBehindCase.mindBehindCase.core.utilities.results;
  */
 public class ErrorResult extends Result {
 
-    public ErrorResult(boolean success, String errorCode, String message) {
+    public ErrorResult(boolean success, int errorCode, String message) {
         super(false, errorCode, message);
     }
 
