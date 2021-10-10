@@ -9,8 +9,9 @@ package com.mindBehindCase.mindBehindCase.core.utilities.results;
  *
  * @author oguz.turkaslan
  */
-public class Result {
+public class Result<T> {
 
+    private T data;
     private boolean success;
     private int errorCode;
     private String message;
@@ -23,6 +24,15 @@ public class Result {
 
     public Result(boolean success) {
         this.success = success;
+    }
+
+    public Result(T data, int errorCode, String message) {
+        this.data = data;
+        this.errorCode = errorCode;
+        this.message = message;
+    }
+
+    public Result() {
     }
 
     public boolean isSuccess() {
@@ -47,6 +57,14 @@ public class Result {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 
 }

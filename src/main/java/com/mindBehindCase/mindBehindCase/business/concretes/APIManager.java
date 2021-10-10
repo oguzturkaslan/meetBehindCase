@@ -36,36 +36,37 @@ public class APIManager implements APIService {
     public Result getComments() {
         List<Comments> commentsList = new ArrayList<>();
         Gson gson = new Gson();
-        String requestAPI = requestHTTP();
-        System.out.println("requestAPI ==================================== " + requestAPI);
-        Result result = new Result(false);
-        result = gson.fromJson(requestAPI, new TypeToken<Result>() {
-        }.getType());
-        if (result.getErrorCode() > HttpURLConnection.HTTP_OK) {
-            return result;
+        Result requestAPI = requestHTTP();
+        if (requestAPI.getData().equals("error")) {
+            return new ErrorResult(false, requestAPI.getErrorCode(), requestAPI.getMessage());
+        } else if (requestAPI.getErrorCode() > HttpURLConnection.HTTP_OK) {
+            return new ErrorResult(false, requestAPI.getErrorCode(), requestAPI.getMessage());
+        } else {
+            String commentsJson = (String) requestAPI.getData();
+            commentsList = gson.fromJson(commentsJson, new TypeToken<List<Comments>>() {
+            }.getType());
+            FileWriter writer;
+            try {
+                writer = new FileWriter("output.txt");
+                for (Comments comment : commentsList) {
+                    writer.write(comment.getId() + ":" + comment.getBody() + ", ");
+                }
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(APIManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return new SuccessResult(true);
         }
 
-        commentsList = gson.fromJson(requestAPI, new TypeToken<List<Comments>>() {
-        }.getType());
-        FileWriter writer;
-        try {
-            writer = new FileWriter("output.txt");
-            for (Comments comment : commentsList) {
-                writer.write(comment.getId() + ":" + comment.getBody() + ", ");
-            }
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(APIManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new SuccessResult(true);
     }
 
-    public String requestHTTP() {
+    public Result requestHTTP() {
         URL url;
         HttpURLConnection con = null;
         StringBuilder sb = null;
         InputStream is;
         BufferedReader br;
+        Result result = null;
         try {
             url = new URL("https://my-json-server.typicode.com/typicode/demo/comments");
             con = (HttpURLConnection) url.openConnection();
@@ -80,6 +81,7 @@ public class APIManager implements APIService {
                 while ((line = br.readLine()) != null) {
                     sb.append(line);
                 }
+                result = new Result(sb.toString(), con.getResponseCode(), con.getResponseMessage());
                 br.close();
             } else {
                 is = con.getErrorStream();
@@ -91,12 +93,15 @@ public class APIManager implements APIService {
                         .append("\"message\"" + ":")
                         .append("\"" + con.getResponseMessage() + "\"")
                         .append("}");
+
+                result = new Result(sb.toString(), con.getResponseCode(), con.getResponseMessage());
             }
 
         } catch (IOException ex) {
+            result = new Result("error", 0, "Connection Error");
             Logger.getLogger(APIManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return sb.toString();
+        return result;
     }
 
 }
